@@ -660,21 +660,40 @@ async def test_on_connect_reconnects_when_version_unchanged(hass, monkeypatch):
 
 
 @pytest.mark.asyncio
-async def test_unresolved_devid_raises_explicitly(hass):
-    """Service call with an unknown devid must raise HomeAssistantError.
+async def test_unresolved_devid_raises_when_multiple_cps(hass):
+    """Service call with an unknown devid must raise when multiple CPs exist.
 
-    Regression guard: must not silently fall back to the first charger.
+    Regression guard: ambiguous devids must not silently fall back to the
+    first charger when the choice would be arbitrary.
     """
     entry = MockConfigEntry(domain=DOMAIN, data=MOCK_CONFIG_DATA.copy())
     cs = CentralSystem(hass, entry)
 
-    _install_dummy_cp(cs, cpid="real_cpid", cp_id="CP_REAL", status=STATE_OK)
+    _install_dummy_cp(cs, cpid="cp_a", cp_id="CP_A", status=STATE_OK)
+    _install_dummy_cp(cs, cpid="cp_b", cp_id="CP_B", status=STATE_OK)
 
     # An unrecognised devid must raise, not fall back to the first charger.
     with pytest.raises(HomeAssistantError):
         await cs.handle_clear_profile(
             SimpleNamespace(data={"devid": "completely_unknown_charger"}),
         )
+
+
+@pytest.mark.asyncio
+async def test_single_cp_fallback_for_missing_devid(hass):
+    """Backwards compatibility: a single CP falls back when devid is missing.
+
+    Legacy service calls did not always include a devid.  With exactly one
+    charge point on the central system the intended target is unambiguous,
+    so keep the historical fallback behaviour.
+    """
+    entry = MockConfigEntry(domain=DOMAIN, data=MOCK_CONFIG_DATA.copy())
+    cs = CentralSystem(hass, entry)
+
+    cp = _install_dummy_cp(cs, cpid="only_cpid", cp_id="CP_ONLY", status=STATE_OK)
+
+    await cs.handle_clear_profile(SimpleNamespace(data={"devid": ""}))
+    assert any(k == "clear_profile" for k, _ in cp.calls)
 
 
 @pytest.mark.asyncio
