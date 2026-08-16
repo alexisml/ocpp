@@ -659,11 +659,20 @@ class CentralSystem:
             cp_id = self.cpids.get(devid, devid)
             cp = self.charge_points.get(cp_id)
             if cp is None:
-                raise HomeAssistantError(
-                    translation_domain=DOMAIN,
-                    translation_key="not_found",
-                    translation_placeholders={"message": devid},
-                )
+                # Backwards compatibility: legacy service calls did not always
+                # supply a devid. When this CentralSystem owns a single charge
+                # point, fall back to it. This fallback is scoped to one
+                # CentralSystem; when multiple central systems are configured
+                # the global router in __init__.py never defaults to the first
+                # one, because multi-CS setups never worked before.
+                if len(self.charge_points) == 1:
+                    cp_id, cp = next(iter(self.charge_points.items()))
+                else:
+                    raise HomeAssistantError(
+                        translation_domain=DOMAIN,
+                        translation_key="not_found",
+                        translation_placeholders={"message": devid},
+                    )
             if cp.status == STATE_UNAVAILABLE:
                 _LOGGER.warning(f"{cp_id}: charger is currently unavailable")
                 raise HomeAssistantError(
