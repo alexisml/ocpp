@@ -61,5 +61,28 @@
         "abort": {
             "single_instance_allowed": "Slechts een exemplaar toegestaan."
         }
+    },
+    "exceptions": {
+        "invalid_ocpp_key": {
+            "message": "Ongeldige OCPP-sleutel"
+        },
+        "ocpp_call_error": {
+            "message": "OCPP-oproep mislukt: {message}"
+        },
+        "get_variables_error": {
+            "message": "Kan variabele niet ophalen: {message}"
+        },
+        "set_variables_error": {
+            "message": "Kan variabele niet instellen: {message}"
+        },
+        "set_charge_rate_error": {
+            "message": "Kan laadstroomlimiet niet instellen: {message}"
+        },
+        "unavailable": {
+            "message": "Oplader is momenteel niet beschikbaar: {message}"
+        },
+        "not_found": {
+            "message": "Geen oplader gevonden voor apparaat-id {message}. Controleer of de devid overeenkomt met de HA-oplader-id (cpid) of de OCPP-oplader-id."
+        }
     }
 }

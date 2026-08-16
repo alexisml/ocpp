@@ -66,5 +66,28 @@
         "abort": {
             "single_instance_allowed": "Es ist nur eine Instanz erlaubt."
         }
+    },
+    "exceptions": {
+        "invalid_ocpp_key": {
+            "message": "Ungültiger OCPP-Schlüssel"
+        },
+        "ocpp_call_error": {
+            "message": "OCPP-Aufruf fehlgeschlagen: {message}"
+        },
+        "get_variables_error": {
+            "message": "Variable konnte nicht abgerufen werden: {message}"
+        },
+        "set_variables_error": {
+            "message": "Variable konnte nicht gesetzt werden: {message}"
+        },
+        "set_charge_rate_error": {
+            "message": "Ladestrombegrenzung konnte nicht gesetzt werden: {message}"
+        },
+        "unavailable": {
+            "message": "Ladestation ist derzeit nicht verfügbar: {message}"
+        },
+        "not_found": {
+            "message": "Keine Ladestation für Geräte-ID {message} gefunden. Prüfen Sie, ob die devid mit der HA-Ladestations-ID (cpid) oder der OCPP-Ladestations-ID übereinstimmt."
+        }
     }
 }
