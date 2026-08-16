@@ -11,7 +11,14 @@
                     "websocket_close_timeout": "Tiempo de espera Websocket (segundos)",
                     "websocket_ping_tries": "Reintentos de conexión Websocket",
                     "websocket_ping_interval": "Intervalo ping Websocket (segundos)",
-                    "websocket_ping_timeout": "Tiempo de espera ping Websocket (segundos)"
+                    "websocket_ping_timeout": "Tiempo de espera ping Websocket (segundos)",
+                    "ssl": "Conexión segura",
+                    "ssl_certfile_path": "Ruta al certificado SSL (o None)",
+                    "ssl_keyfile_path": "Ruta a la clave SSL (o None)",
+                    "ocpp_version": "Versión de OCPP"
+                },
+                "data_description": {
+                    "ocpp_version": "Negocia automáticamente con el cargador usando el orden predeterminado de la integración (OCPP 1.6 primero). Elija una versión específica para restringir la negociación a ella, así un cargador que anuncie varias versiones quedará atado a la que elija."
                 }
             },
             "cp_user": {
@@ -22,7 +29,10 @@
                     "meter_interval": "Intervalo de mediciones (segundos)",
                     "idle_interval": "Intervalo de muestreo del cargador en reposo (segundos)",
                     "skip_schema_validation": "Omitir validación esquema OCPP",
-                    "force_smart_charging": "Forzar perfil de función Smart Charging"
+                    "force_smart_charging": "Forzar perfil de función Smart Charging",
+                    "max_current": "Corriente máxima de carga",
+                    "monitored_variables_autoconfig": "Detección automática de medidas OCPP",
+                    "enable_ha_notifications": "Habilitar notificaciones de Home Assistant"
                 }
             },
             "measurands": {
@@ -52,11 +62,30 @@
                     "Temperature": "Temperature: Lectura de la temperatura en el interior del punto de carga",
                     "Voltage": "Voltage: Tensión de alimentación AC RMS instantánea"
                 }
+            },
+            "reconfigure": {
+                "title": "Configuración del sistema central OCPP",
+                "description": "Si necesitas ayuda con la configuración, consulta [aquí]({docs_url})",
+                "data": {
+                    "host": "Dirección del sistema central",
+                    "port": "Puerto del sistema central",
+                    "ssl": "Conexión segura",
+                    "ssl_certfile_path": "Ruta al certificado SSL (o None)",
+                    "ssl_keyfile_path": "Ruta a la clave SSL (o None)",
+                    "csid": "Identidad del sistema central",
+                    "ocpp_version": "Versión de OCPP",
+                    "websocket_close_timeout": "Tiempo de espera para cerrar el websocket (segundos)",
+                    "websocket_ping_tries": "Intentos sucesivos de conexión antes de cerrar el websocket",
+                    "websocket_ping_interval": "Intervalo de ping del websocket (segundos)",
+                    "websocket_ping_timeout": "Tiempo de espera del ping del websocket (segundos)"
+                },
+                "data_description": {
+                    "ocpp_version": "Negocia automáticamente con el cargador usando el orden predeterminado de la integración (OCPP 1.6 primero). Elija una versión específica para restringir la negociación a ella, así un cargador que anuncie varias versiones quedará atado a la que elija."
+                }
             }
         },
         "error": {
-            "auth": "Usuario/contraseña incorrecto.",
-            "measurand": "Medida desconocida",
+            "auth": "Usuario o contraseña incorrectos.",
             "no_measurands_selected": "No se ha seleccionado ninguna medida: seleccione al menos una",
             "invalid_cpid": "Nombre de identidad del punto de carga no válido: use solo letras minúsculas, dígitos y _",
             "duplicate_cpid": "Esta identidad de punto de carga ya la utiliza otro punto de carga. Elija una identidad única."
