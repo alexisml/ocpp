@@ -7,38 +7,14 @@
                 "data": {
                     "host": "Host-Adresse des Zentralsystems",
                     "port": "Portnummer des Zentralsystems",
+                    "csid": "Identität des Zentralsystems",
+                    "websocket_close_timeout": "Timeout beim Schließen des Websockets (Sekunden)",
+                    "websocket_ping_tries": "Verbindungsversuche vor dem Schließen des Websockets",
+                    "websocket_ping_interval": "Websocket-Ping-Intervall (Sekunden)",
+                    "websocket_ping_timeout": "Websocket-Ping-Timeout (Sekunden)",
                     "ssl": "Verschlüsselte Verbindung",
                     "ssl_certfile_path": "Pfad zum SSL Zertifikat",
-                    "ssl_keyfile_path": "Pfad zum SSL Schlüssel",
-                    "csid": "Identität des Zentralsystems",
-                    "ocpp_version": "OCPP Version",
-                    "websocket_close_timeout": "Timeout beim Schließen des Websockets (Sekunden)",
-                    "websocket_ping_tries": "Verbindungsversuche vor dem Schließen des Websockets",
-                    "websocket_ping_interval": "Websocket-Ping-Intervall (Sekunden)",
-                    "websocket_ping_timeout": "Websocket-Ping-Timeout (Sekunden)"
-                },
-                "data_description": {
-                    "ocpp_version": "Verhandelt automatisch mit dem Lader in der Standardreihenfolge der Integration (zuerst OCPP 1.6). Wähle eine bestimmte Version, um die Verhandlung darauf zu beschränken, sodass ein Lader, der mehrere Versionen anbietet, an die gewählte gebunden ist."
-                }
-            },
-            "reconfigure": {
-                "title": "OCPP Zentralsystem-Konfiguration",
-                "description": "Wenn du Hilfe bei der Konfiguration benötigst, schaue hier [nach]({docs_url})",
-                "data": {
-                    "host": "Host-Adresse des Zentralsystems",
-                    "port": "Portnummer des Zentralsystems",
-                    "ssl": "Verschlüsselte Verbindung",
-                    "ssl_certfile_path": "Pfad zum SSL Zertifikat oder (None)",
-                    "ssl_keyfile_path": "Pfad zum SSL Schlüssel oder (None)",
-                    "csid": "Identität des Zentralsystems",
-                    "ocpp_version": "OCPP Version",
-                    "websocket_close_timeout": "Timeout beim Schließen des Websockets (Sekunden)",
-                    "websocket_ping_tries": "Verbindungsversuche vor dem Schließen des Websockets",
-                    "websocket_ping_interval": "Websocket-Ping-Intervall (Sekunden)",
-                    "websocket_ping_timeout": "Websocket-Ping-Timeout (Sekunden)"
-                },
-                "data_description": {
-                    "ocpp_version": "Verhandelt automatisch mit dem Lader in der Standardreihenfolge der Integration (zuerst OCPP 1.6). Wähle eine bestimmte Version, um die Verhandlung darauf zu beschränken, sodass ein Lader, der mehrere Versionen anbietet, an die gewählte gebunden ist."
+                    "ssl_keyfile_path": "Pfad zum SSL Schlüssel"
                 }
             },
             "cp_user": {
@@ -48,11 +24,10 @@
                     "cpid": "Identität der Ladestation",
                     "max_current": "Maximaler Ladestrom",
                     "meter_interval": "Abtastintervall Laden (Sekunden)",
-                    "monitored_variables_autoconfig": "Automatische Erkennung der OCPP-Messwerte",
                     "idle_interval": "Abtastintervall Leerlauf (Sekunden)",
                     "skip_schema_validation": "Überspringe OCPP-Schemavalidierung",
                     "force_smart_charging": "Erzwinge Smart Charging Funktionsprofil",
-                    "enable_ha_notifications": "Home Assistant Benachrichtigungen aktivieren"
+                    "monitored_variables_autoconfig": "Automatische Erkennung der OCPP-Messwerte"
                 }
             },
             "measurands": {
@@ -86,95 +61,10 @@
         },
         "error": {
             "auth": "Benutzername/Passwort ist falsch.",
-            "no_measurands_selected": "Kein Messwert ausgewählt: bitte wähle mindestens einen aus",
-            "invalid_cpid": "Ungültiger Name für die Ladestations-Identität: nur Kleinbuchstaben, Ziffern und _ verwenden",
-            "duplicate_cpid": "Diese Ladestations-Identität wird bereits von einer anderen Ladestation verwendet. Wähle eine eindeutige."
+            "measurand": "Unbekannter Messwert"
         },
         "abort": {
-            "single_instance_allowed": "Es ist nur eine Instanz erlaubt.",
-            "reauth_successful": "Neuer Lader konfiguriert",
-            "reconfigure_successful": "Konfiguration aktualisiert"
-        }
-    },
-    "exceptions": {
-        "invalid_ocpp_key": {
-            "message": "Ungültiger OCPP Schlüssel"
-        },
-        "ocpp_call_error": {
-            "message": "OCPP Aufruf fehlgeschlagen: {message}"
-        },
-        "get_variables_error": {
-            "message": "Variable konnte nicht abgerufen werden: {message}"
-        },
-        "set_variables_error": {
-            "message": "Variable konnte nicht gesetzt werden: {message}"
-        },
-        "set_charge_rate_error": {
-            "message": "Ladestrombegrenzung konnte nicht gesetzt werden: {message}"
-        },
-        "unavailable": {
-            "message": "Ladestation ist derzeit nicht verfügbar: {message}"
-        },
-        "not_found": {
-            "message": "Kein Lader für Geräte-ID {message} gefunden. Prüfe, ob die devid mit der HA Lader-ID (cpid) oder der OCPP Lader-ID übereinstimmt."
-        }
-    },
-    "options": {
-        "step": {
-            "init": {
-                "title": "OCPP Ladestations-Konfiguration",
-                "description": "Wähle die zu bearbeitende Ladestation.",
-                "data": {
-                    "cp_id": "Ladestation"
-                }
-            },
-            "cp_settings": {
-                "title": "OCPP Ladestations-Konfiguration",
-                "description": "Ladestation {cp_id} bearbeiten. Ihre Ladestations-Identität (cpid: {cpid}) ist fest, da sich daraus die Entitäts-IDs ableiten.",
-                "data": {
-                    "max_current": "Maximaler Ladestrom",
-                    "meter_interval": "Abtastintervall Laden (Sekunden)",
-                    "monitored_variables_autoconfig": "Automatische Erkennung der OCPP-Messwerte",
-                    "idle_interval": "Abtastintervall Leerlauf (Sekunden)",
-                    "skip_schema_validation": "Überspringe OCPP-Schemavalidierung",
-                    "force_smart_charging": "Erzwinge Smart Charging Funktionsprofil",
-                    "enable_ha_notifications": "Home Assistant Benachrichtigungen aktivieren"
-                }
-            },
-            "measurands": {
-                "title": "OCPP-Messwerte",
-                "description": "Wähle aus welche Messwerte in Home Assistant verwendet werden sollen.",
-                "data": {
-                    "Current.Export": "Current.Export: Instantaneous current flow from EV",
-                    "Current.Import": "Current.Import: Instantaneous current flow to EV",
-                    "Current.Offered": "Current.Offered: Maximum current offered to EV",
-                    "Energy.Active.Export.Register": "Energy.Active.Export.Register: Active energy exported to the grid",
-                    "Energy.Active.Import.Register": "Energy.Active.Import.Register: Active energy imported from the grid",
-                    "Energy.Reactive.Export.Register": "Energy.Reactive.Export.Register: Reactive energy exported to the grid",
-                    "Energy.Reactive.Import.Register": "Energy.Reactive.Import.Register: Reactive energy imported from the grid",
-                    "Energy.Active.Export.Interval": "Energy.Active.Export.Interval: Active energy exported to the grid during last interval",
-                    "Energy.Active.Import.Interval": "Energy.Active.Import.Interval: Active energy imported from the grid during last interval",
-                    "Energy.Reactive.Export.Interval": "Energy.Reactive.Export.Interval: Reactive energy exported to the grid during last interval",
-                    "Energy.Reactive.Import.Interval": "Energy.Reactive.Import.Interval: Reactive energy imported from the grid during last interval",
-                    "Frequency": "Frequency: Powerline frequency",
-                    "Power.Active.Export": "Power.Active.Export: Instantaneous active power exported by EV",
-                    "Power.Active.Import": "Power.Active.Import: Instantaneous active power imported by EV",
-                    "Power.Factor": "Power.Factor: Instantaneous power factor of total energy flow",
-                    "Power.Offered": "Power.Offered: Maximum power offered to EV",
-                    "Power.Reactive.Export": "Power.Reactive.Export: Instantaneous reactive power exported by EV",
-                    "Power.Reactive.Import": "Power.Reactive.Import: Instantaneous reactive power imported by EV",
-                    "RPM": "RPM: Fan speed in RPM",
-                    "SoC": "SoC: State of charge of EV in percentage",
-                    "Temperature": "Temperature: Temperature reading inside Charge Point",
-                    "Voltage": "Voltage: Instantaneous AC RMS supply voltage"
-                }
-            }
-        },
-        "error": {
-            "no_measurands_selected": "Kein Messwert ausgewählt: bitte wähle mindestens einen aus"
-        },
-        "abort": {
-            "no_charge_points": "Es hat sich noch keine Ladestation mit diesem Zentralsystem verbunden, daher gibt es nichts zu konfigurieren."
+            "single_instance_allowed": "Es ist nur eine Instanz erlaubt."
         }
     }
 }
