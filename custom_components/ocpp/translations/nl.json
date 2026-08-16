@@ -7,11 +7,38 @@
                 "data": {
                     "host": "Host",
                     "port": "Poort",
+                    "ssl": "Beveiligde verbinding",
+                    "ssl_certfile_path": "Pad naar SSL-certificaat of (None)",
+                    "ssl_keyfile_path": "Pad naar SSL-sleutel of (None)",
                     "csid": "Central system identifier",
+                    "ocpp_version": "OCPP versie",
                     "websocket_close_timeout": "Websocket close timeout (secondes)",
                     "websocket_ping_tries": "Websocket successive times to try connection before closing",
                     "websocket_ping_interval": "Websocket ping interval (secondes)",
                     "websocket_ping_timeout": "Websocket ping timeout (secondes)"
+                },
+                "data_description": {
+                    "ocpp_version": "Onderhandelt automatisch met de lader in de standaardvolgorde van de integratie (eerst OCPP 1.6). Kies een specifieke versie om de onderhandeling daartoe te beperken, zodat een lader die meerdere versies adverteert aan de gekozen versie gebonden is."
+                }
+            },
+            "reconfigure": {
+                "title": "OCPP Configuratie centraal systeem",
+                "description": "Voor hulp bij configuratie [zie]({docs_url})",
+                "data": {
+                    "host": "Hostadres centraal systeem",
+                    "port": "Poortnummer centraal systeem",
+                    "ssl": "Beveiligde verbinding",
+                    "ssl_certfile_path": "Pad naar SSL-certificaat of (None)",
+                    "ssl_keyfile_path": "Pad naar SSL-sleutel of (None)",
+                    "csid": "Identiteit centraal systeem",
+                    "ocpp_version": "OCPP versie",
+                    "websocket_close_timeout": "Websocket sluit-time-out (seconden)",
+                    "websocket_ping_tries": "Websocket aantal keer opnieuw proberen voor sluiten",
+                    "websocket_ping_interval": "Websocket ping-interval (seconden)",
+                    "websocket_ping_timeout": "Websocket ping-time-out (seconden)"
+                },
+                "data_description": {
+                    "ocpp_version": "Onderhandelt automatisch met de lader in de standaardvolgorde van de integratie (eerst OCPP 1.6). Kies een specifieke versie om de onderhandeling daartoe te beperken, zodat een lader die meerdere versies adverteert aan de gekozen versie gebonden is."
                 }
             },
             "cp_user": {
@@ -21,8 +48,11 @@
                     "cpid": "Charge point identifier",
                     "max_current": "Maximale laadstroom",
                     "meter_interval": "Meetinterval (secondes)",
+                    "monitored_variables_autoconfig": "Automatische detectie van OCPP meetwaarden",
+                    "idle_interval": "Meetinterval inactieve lader (seconden)",
                     "skip_schema_validation": "Skip OCPP schema validation",
-                    "force_smart_charging": "Functieprofiel Smart Charging forceren"
+                    "force_smart_charging": "Functieprofiel Smart Charging forceren",
+                    "enable_ha_notifications": "Home Assistant meldingen inschakelen"
                 }
             },
             "measurands": {
@@ -56,10 +86,95 @@
         },
         "error": {
             "auth": "Verkeerde gebruikersnaam of wachtwoord.",
-            "measurand": "Onbekende meetgrootheid"
+            "no_measurands_selected": "Geen meetgrootheid geselecteerd: selecteer er minstens één",
+            "invalid_cpid": "Ongeldige laadpunt-identiteit: gebruik alleen kleine letters, cijfers en _",
+            "duplicate_cpid": "Deze laadpunt-identiteit wordt al gebruikt door een ander laadpunt. Kies een unieke."
         },
         "abort": {
-            "single_instance_allowed": "Slechts een exemplaar toegestaan."
+            "single_instance_allowed": "Slechts een exemplaar toegestaan.",
+            "reauth_successful": "Nieuwe lader geconfigureerd",
+            "reconfigure_successful": "Configuratie bijgewerkt"
+        }
+    },
+    "exceptions": {
+        "invalid_ocpp_key": {
+            "message": "Ongeldige OCPP-sleutel"
+        },
+        "ocpp_call_error": {
+            "message": "OCPP oproep mislukt: {message}"
+        },
+        "get_variables_error": {
+            "message": "Variabele ophalen mislukt: {message}"
+        },
+        "set_variables_error": {
+            "message": "Variabele instellen mislukt: {message}"
+        },
+        "set_charge_rate_error": {
+            "message": "Laadstroomlimiet instellen mislukt: {message}"
+        },
+        "unavailable": {
+            "message": "Lader is momenteel niet beschikbaar: {message}"
+        },
+        "not_found": {
+            "message": "Geen lader gevonden voor apparaat-id {message}. Controleer of de devid overeenkomt met de HA lader-id (cpid) of de OCPP lader-id."
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "title": "OCPP Lader configuratie",
+                "description": "Selecteer het te bewerken laadpunt.",
+                "data": {
+                    "cp_id": "Laadpunt"
+                }
+            },
+            "cp_settings": {
+                "title": "OCPP Lader configuratie",
+                "description": "Laadpunt {cp_id} bewerken. De laadpunt-identiteit (cpid: {cpid}) is vast, omdat entiteits-id's hieruit worden afgeleid.",
+                "data": {
+                    "max_current": "Maximale laadstroom",
+                    "meter_interval": "Meetinterval laden (seconden)",
+                    "monitored_variables_autoconfig": "Automatische detectie van OCPP meetwaarden",
+                    "idle_interval": "Meetinterval inactieve lader (seconden)",
+                    "skip_schema_validation": "OCPP schema-validatie overslaan",
+                    "force_smart_charging": "Smart Charging functieprofiel forceren",
+                    "enable_ha_notifications": "Home Assistant meldingen inschakelen"
+                }
+            },
+            "measurands": {
+                "title": "OCPP Meetgrootheden",
+                "description": "Selecteer welke meetgrootheden in Home Assistant gebruikt moeten worden.",
+                "data": {
+                    "Current.Export": "Current.Export: Instantaneous current flow from EV",
+                    "Current.Import": "Current.Import: Instantaneous current flow to EV",
+                    "Current.Offered": "Current.Offered: Maximum current offered to EV",
+                    "Energy.Active.Export.Register": "Energy.Active.Export.Register: Active energy exported to the grid",
+                    "Energy.Active.Import.Register": "Energy.Active.Import.Register: Active energy imported from the grid",
+                    "Energy.Reactive.Export.Register": "Energy.Reactive.Export.Register: Reactive energy exported to the grid",
+                    "Energy.Reactive.Import.Register": "Energy.Reactive.Import.Register: Reactive energy imported from the grid",
+                    "Energy.Active.Export.Interval": "Energy.Active.Export.Interval: Active energy exported to the grid during last interval",
+                    "Energy.Active.Import.Interval": "Energy.Active.Import.Interval: Active energy imported from the grid during last interval",
+                    "Energy.Reactive.Export.Interval": "Energy.Reactive.Export.Interval: Reactive energy exported to the grid during last interval",
+                    "Energy.Reactive.Import.Interval": "Energy.Reactive.Import.Interval: Reactive energy imported from the grid during last interval",
+                    "Frequency": "Frequency: Powerline frequency",
+                    "Power.Active.Export": "Power.Active.Export: Instantaneous active power exported by EV",
+                    "Power.Active.Import": "Power.Active.Import: Instantaneous active power imported by EV",
+                    "Power.Factor": "Power.Factor: Instantaneous power factor of total energy flow",
+                    "Power.Offered": "Power.Offered: Maximum power offered to EV",
+                    "Power.Reactive.Export": "Power.Reactive.Export: Instantaneous reactive power exported by EV",
+                    "Power.Reactive.Import": "Power.Reactive.Import: Instantaneous reactive power imported by EV",
+                    "RPM": "RPM: Fan speed in RPM",
+                    "SoC": "SoC: State of charge of EV in percentage",
+                    "Temperature": "Temperature: Temperature reading inside Charge Point",
+                    "Voltage": "Voltage: Instantaneous AC RMS supply voltage"
+                }
+            }
+        },
+        "error": {
+            "no_measurands_selected": "Geen meetgrootheid geselecteerd: selecteer er minstens één"
+        },
+        "abort": {
+            "no_charge_points": "Er is nog geen laadpunt verbonden met dit centrale systeem, dus er is niets te configureren."
         }
     }
 }
