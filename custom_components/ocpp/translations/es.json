@@ -56,10 +56,6 @@
         },
         "error": {
             "auth": "Usuario/contraseña incorrecto.",
-            "measurand": "Medida desconocida"
-        },
-        "error": {
-            "auth": "Usuario/contraseña incorrecto.",
             "measurand": "Medida desconocida",
             "no_measurands_selected": "No se ha seleccionado ninguna medida: seleccione al menos una",
             "invalid_cpid": "Nombre de identidad del punto de carga no válido: use solo letras minúsculas, dígitos y _",

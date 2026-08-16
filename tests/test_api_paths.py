@@ -751,6 +751,25 @@ async def test_multi_central_system_routing_via_global_resolver(hass):
     # unknown devid must raise
     with pytest.raises(HomeAssistantError):
         _resolve_central_system(hass, "nonexistent")
+    # empty devid is ambiguous with multiple CSes and must raise
+    with pytest.raises(HomeAssistantError):
+        _resolve_central_system(hass, "")
+
+
+@pytest.mark.asyncio
+async def test_empty_devid_resolves_to_only_central_system(hass):
+    """Backwards compatibility: empty devid resolves when only one CS is loaded."""
+    from custom_components.ocpp import _resolve_central_system
+
+    entry = MockConfigEntry(domain=DOMAIN, data=MOCK_CONFIG_DATA.copy())
+    cs = CentralSystem(hass, entry)
+
+    _install_dummy_cp(cs, cpid="only_cpid", cp_id="CP_ONLY", status=STATE_OK)
+
+    hass.data.setdefault(DOMAIN, {})
+    hass.data[DOMAIN][entry.entry_id] = cs
+
+    assert _resolve_central_system(hass, "") is cs
 
 
 @pytest.mark.asyncio
